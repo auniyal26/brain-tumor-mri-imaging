@@ -1,0 +1,10 @@
+{
+  "seed": 42,
+  "val_frac": 0.2,
+  "img_size": 224,
+  "batch_size": 32,
+  "epochs_A": 4,
+  "epochs_B": 4,
+  "lr": 0.001,
+  "threshold_no": 0.9
+}
