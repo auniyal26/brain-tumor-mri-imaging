@@ -43,15 +43,15 @@ Choose:
 
 Outputs are written to:
 
-* `LifeReset/Artifacts/run/` (cleared each run)
+* `../Artifacts/run/` (cleared each run)
 
 ## Results snapshot
 
 Versioned, non-overwritten outputs are stored in:
 
-* `LifeReset/results/baseline_4class/`
-* `LifeReset/results/new_stageAB_calibrated/`
+* `../results/baseline_4class/`
+* `../results/new_stageAB_calibrated/`
 
 Comparison table:
 
-* `LifeReset/results/COMPARISON.md`
+* `../results/COMPARISON.md`
