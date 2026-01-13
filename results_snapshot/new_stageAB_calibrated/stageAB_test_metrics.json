@@ -1,0 +1,11 @@
+{
+  "acc": 0.5634517766497462,
+  "balanced_acc": 0.5643667114319288,
+  "macro_f1": 0.5400723553135034,
+  "per_class_recall": {
+    "glioma_tumor": 0.19,
+    "meningioma_tumor": 0.8956521739130435,
+    "no_tumor": 0.42857142857142855,
+    "pituitary_tumor": 0.7432432432432432
+  }
+}
