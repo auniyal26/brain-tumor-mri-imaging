@@ -5,6 +5,8 @@
 This repo contains a reproducible baseline + a two-stage classifier (Stage A: no_tumor vs tumor, Stage B: tumor subtype).
 
 ## Dataset
+Source: https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri
+
 Expected structure:
 ```
 
