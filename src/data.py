@@ -109,10 +109,9 @@ class TumorTransformSubset(Dataset):
 # ----------------------------
 def get_transforms(img_size: int, train: bool) -> transforms.Compose:
     """
-    MRI shift-targeted transforms:
-    - forces grayscale consistency (MRI often stored as RGB but visually grayscale)
-    - adds intensity/histogram augmentation (contrast/brightness/gamma/autocontrast/equalize)
-    - keeps ImageNet normalize for pretrained ResNet18
+    MRI shift-targeted transforms.
+    Single lever: make training more robust to intensity/histogram + grayscale differences.
+    Keep eval deterministic.
     """
 
     def rand_gamma(img):
@@ -121,7 +120,7 @@ def get_transforms(img_size: int, train: bool) -> transforms.Compose:
 
     common = [
         transforms.Resize((img_size, img_size)),
-        transforms.Grayscale(num_output_channels=3),
+        transforms.Grayscale(num_output_channels=3),  # force grayscale consistency
     ]
 
     if train:
@@ -129,7 +128,7 @@ def get_transforms(img_size: int, train: bool) -> transforms.Compose:
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomRotation(degrees=10),
 
-            # intensity domain (MRI-relevant)
+            # intensity / histogram shift (MRI-relevant)
             transforms.RandomApply(
                 [transforms.ColorJitter(brightness=0.25, contrast=0.25)],
                 p=0.70,
@@ -138,13 +137,11 @@ def get_transforms(img_size: int, train: bool) -> transforms.Compose:
             transforms.RandomEqualize(p=0.10),
             transforms.RandomApply([transforms.Lambda(rand_gamma)], p=0.50),
         ]
-        tail = [
+        return transforms.Compose(common + aug + [
             transforms.ToTensor(),
             transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
-        ]
-        return transforms.Compose(common + aug + tail)
+        ])
 
-    # eval: deterministic
     return transforms.Compose(common + [
         transforms.ToTensor(),
         transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
