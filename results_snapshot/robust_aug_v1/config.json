@@ -1,0 +1,42 @@
+{
+  "config_path": "d:\\Study Material\\LifeReset\\Imaging\\configs\\stageAB.json",
+  "seed": 42,
+  "val_frac": 0.2,
+  "img_size": 224,
+  "batch_size": 32,
+  "epochs_A": 4,
+  "epochs_B": 4,
+  "lr": 0.001,
+  "threshold_no_init": 0.9,
+  "train_dir": "d:\\Study Material\\LifeReset\\Imaging\\Data\\Training",
+  "test_dir": "d:\\Study Material\\LifeReset\\Imaging\\Data\\Testing",
+  "split_dir": "d:\\Study Material\\LifeReset\\Artifacts\\splits\\seed42_val0.20",
+  "run_dir": "d:\\Study Material\\LifeReset\\Artifacts\\run",
+  "classes": [
+    "glioma_tumor",
+    "meningioma_tumor",
+    "no_tumor",
+    "pituitary_tumor"
+  ],
+  "class_to_idx": {
+    "glioma_tumor": 0,
+    "meningioma_tumor": 1,
+    "no_tumor": 2,
+    "pituitary_tumor": 3
+  },
+  "n_train": 2296,
+  "n_val": 574,
+  "n_test": 394,
+  "train_counts": {
+    "0": 661,
+    "2": 316,
+    "1": 657,
+    "3": 662
+  },
+  "val_counts": {
+    "1": 165,
+    "2": 79,
+    "0": 165,
+    "3": 165
+  }
+}
