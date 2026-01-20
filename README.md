@@ -57,3 +57,22 @@ Versioned, non-overwritten outputs are stored in:
 Comparison table:
 
 * `../results/COMPARISON.md`
+
+## RESULTS (quick proof)
+
+**Best run so far (TEST):** New Stage AB (calibrated)  
+See: `results_snapshot/COMPARISON.md`
+
+**Where to look (images):**
+- Robust Aug v1 confusion matrices:
+  - `results_snapshot/robust_aug_v1/stageAB_val_confusion_matrix.png`
+  - `results_snapshot/robust_aug_v1/stageAB_test_confusion_matrix.png`
+
+**Numbers (TEST) — from COMPARISON.md**
+- Baseline 4-class: acc 0.4467, balanced 0.4314, macro F1 0.3943
+- Stage AB (calibrated): acc 0.5635, balanced 0.5644, macro F1 0.5401
+- Robust Aug v1: acc 0.4924, balanced 0.5076, macro F1 0.4552
+
+**Screenshots:**
+![Confusion Matrix (TEST)](assets/cm_test.png)
+![Confusion Matrix (VAL)](assets/cm_val.png)
