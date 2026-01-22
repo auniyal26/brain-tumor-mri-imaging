@@ -78,18 +78,31 @@ def sweep_T_for_stageAB(
     """
     For each T:
       pred = no_idx if p_no >= T else predB_orig
-    Choose best T by VAL balanced accuracy (multiclass).
+
+    NEW (single lever): constrain Stage-A gate not to wipe tumor recall:
+      tumor_gate_recall = P(pred != NO | true != NO) must be >= MIN_TUMOR_GATE_RECALL
+    Then choose best T by VAL balanced accuracy (multiclass).
     """
+
     if ts is None:
         ts = np.round(np.linspace(0.05, 0.99, 95), 2)
 
+    MIN_TUMOR_GATE_RECALL = 0.95  # <-- the lever (keep fixed for controlled exp)
+
     rows = []
-    best_bal, best_T = -1.0, None
+    best_row = None
 
     labels = np.arange(len(classes), dtype=np.int64)
+    is_tumor_true = (y_true != int(no_idx))
 
     for T in ts:
+        T = float(T)
         y_pred = np.where(p_no >= T, no_idx, predB_orig).astype(np.int64)
+
+        # --- gate safety metric: tumor predicted as NO is the catastrophic failure
+        fn_tumor_to_no = int(np.sum(is_tumor_true & (y_pred == int(no_idx))))
+        tp_tumor_to_tumor = int(np.sum(is_tumor_true & (y_pred != int(no_idx))))
+        tumor_gate_recall = tp_tumor_to_tumor / max(int(np.sum(is_tumor_true)), 1)
 
         bal = float(balanced_accuracy_score(y_true, y_pred))
         mf1 = float(f1_score(y_true, y_pred, average="macro", zero_division=0))
@@ -98,17 +111,58 @@ def sweep_T_for_stageAB(
         rec = per_class_recall_from_cm(cm, classes)
 
         row = {
-            "T": float(T),
+            "T": T,
             "balanced_acc": bal,
             "macro_f1": mf1,
+            "tumor_gate_recall": float(tumor_gate_recall),
+            "fn_tumor_to_no": fn_tumor_to_no,
             **{f"recall_{k}": v for k, v in rec.items()},
         }
         rows.append(row)
 
-        if bal > best_bal:
-            best_bal, best_T = bal, float(T)
+        # constraint filter
+        is_safe = (tumor_gate_recall >= MIN_TUMOR_GATE_RECALL)
 
-    return best_T, rows
+        def better(a, b):
+            """Pick better row with tie-breakers."""
+            if b is None:
+                return True
+            # primary: safe beats unsafe
+            if a["tumor_gate_recall"] >= MIN_TUMOR_GATE_RECALL and b["tumor_gate_recall"] < MIN_TUMOR_GATE_RECALL:
+                return True
+            if a["tumor_gate_recall"] < MIN_TUMOR_GATE_RECALL and b["tumor_gate_recall"] >= MIN_TUMOR_GATE_RECALL:
+                return False
+
+            # now within same safety bucket:
+            # primary: balanced_acc
+            if a["balanced_acc"] != b["balanced_acc"]:
+                return a["balanced_acc"] > b["balanced_acc"]
+
+            # tie-breaker 1: fewer tumor->NO mistakes
+            if a["fn_tumor_to_no"] != b["fn_tumor_to_no"]:
+                return a["fn_tumor_to_no"] < b["fn_tumor_to_no"]
+
+            # tie-breaker 2: higher recall_no_tumor (keeps AB efficient)
+            ra = a.get("recall_no_tumor", -1.0)
+            rb = b.get("recall_no_tumor", -1.0)
+            if ra != rb:
+                return ra > rb
+
+            # tie-breaker 3: higher T (more conservative calling NO)
+            return a["T"] > b["T"]
+
+        if better(row, best_row):
+            best_row = row
+
+    if best_row is None:
+        raise RuntimeError("Threshold sweep produced no rows.")
+
+    # (Optional) print one line so you SEE the safety constraint effect
+    print(f"[THRESH SWEEP] MIN_TUMOR_GATE_RECALL={MIN_TUMOR_GATE_RECALL:.2f} | "
+          f"best_T={best_row['T']:.2f} | bal={best_row['balanced_acc']:.4f} | "
+          f"tumor_gate_recall={best_row['tumor_gate_recall']:.4f} | fn_tumor_to_no={best_row['fn_tumor_to_no']}")
+
+    return float(best_row["T"]), rows
 
 
 def main():
