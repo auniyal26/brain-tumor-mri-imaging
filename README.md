@@ -11,21 +11,19 @@ Source: https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification
 
 Expected structure (NOT pushed):
 
-```
-
+```text
 Imaging/Data/
-Training/
-glioma_tumor/
-meningioma_tumor/
-no_tumor/
-pituitary_tumor/
-Testing/
-glioma_tumor/
-meningioma_tumor/
-no_tumor/
-pituitary_tumor/
+  Training/
+    glioma_tumor/
+    meningioma_tumor/
+    no_tumor/
+    pituitary_tumor/
+  Testing/
+    glioma_tumor/
+    meningioma_tumor/
+    no_tumor/
+    pituitary_tumor/
 
-````
 
 ## Setup
 
