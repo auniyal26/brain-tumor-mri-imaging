@@ -1,4 +1,3 @@
-```md
 # Imaging — Brain Tumor MRI (4-class)
 
 Reproducible baseline + a two-stage classifier:
