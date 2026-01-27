@@ -1,13 +1,16 @@
-
 ```md
 # Imaging — Brain Tumor MRI (4-class)
 
-This repo contains a reproducible baseline + a two-stage classifier (Stage A: no_tumor vs tumor, Stage B: tumor subtype).
+Reproducible baseline + a two-stage classifier:
+- **Stage A:** `no_tumor` vs `tumor`
+- **Stage B:** tumor subtype (`glioma`, `meningioma`, `pituitary`)
 
 ## Dataset
+
 Source: https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri
 
-Expected structure:
+Expected structure (NOT pushed):
+
 ```
 
 Imaging/Data/
@@ -25,17 +28,21 @@ pituitary_tumor/
 ````
 
 ## Setup
-Create/select venv and install deps:
+
+Create/select a venv, then install common deps:
+
 ```bash
-pip install -r requirements.txt
+pip install torch torchvision numpy scikit-learn matplotlib tqdm pillow
 ````
+
+(If you already have a working env for this repo, keep using it.)
 
 ## Run (CLI)
 
 Interactive runner:
 
 ```bash
-python Imaging/scripts/main.py
+python .\scripts\main.py
 ```
 
 Choose:
@@ -45,34 +52,32 @@ Choose:
 
 Outputs are written to:
 
-* `../Artifacts/run/` (cleared each run)
+* `..\Artifacts\run\` (local scratch; overwritten each run)
 
-## Results snapshot
+## Results snapshots (versioned)
 
-Versioned, non-overwritten outputs are stored in:
+After each run, key outputs are copied from `..\Artifacts\run\` into:
 
-* `../results/baseline_4class/`
-* `../results/new_stageAB_calibrated/`
+* `results_snapshot/<run_name>/`
 
-Comparison table:
+Comparison table (single source of truth):
 
-* `../results/COMPARISON.md`
+* `results_snapshot/COMPARISON.md`
 
 ## RESULTS (quick proof)
 
-**Best run so far (TEST):** New Stage AB (calibrated)  
+Best overall run so far (TEST): **Constrained threshold v2 (THRESH_NO=0.54)**
 See: `results_snapshot/COMPARISON.md`
 
-**Where to look (images):**
-- Robust Aug v1 confusion matrices:
-  - `results_snapshot/robust_aug_v1/stageAB_val_confusion_matrix.png`
-  - `results_snapshot/robust_aug_v1/stageAB_test_confusion_matrix.png`
+### Baseline (4-class ResNet18)
 
-**Numbers (TEST) — from COMPARISON.md**
-- Baseline 4-class: acc 0.4467, balanced 0.4314, macro F1 0.3943
-- Stage AB (calibrated): acc 0.5635, balanced 0.5644, macro F1 0.5401
-- Robust Aug v1: acc 0.4924, balanced 0.5076, macro F1 0.4552
+Baseline on TEST (confusion matrix):
 
-**Screenshots:**
-![Confusion Matrix (TEST)](assets/cm_test.png)
-![Confusion Matrix (VAL)](assets/cm_val.png)
+![Baseline TEST confusion matrix](assets/baseline_cm_test.png)
+
+Training curves (baseline run):
+
+![Baseline training curves](assets/baseline_curves.png)
+
+```
+```
