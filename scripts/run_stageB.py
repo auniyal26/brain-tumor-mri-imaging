@@ -304,7 +304,13 @@ def main():
     valB_loader   = DataLoader(valB_ds,   batch_size=BATCH_SIZE, shuffle=False,  num_workers=0)
 
     modelB = build_stageB(pretrained=True).to(device)
-    criterionB = nn.CrossEntropyLoss()
+
+    wB = countsB.sum() / (3 * np.maximum(countsB, 1))  # inverse-frequency style
+    wB = torch.tensor(wB, dtype=torch.float32, device=device)
+    print("StageB counts [glioma, meningioma, pituitary]:", countsB.tolist())
+    print("StageB class weights:", wB.detach().cpu().numpy().tolist())
+
+    criterionB = nn.CrossEntropyLoss(weight=wB)
     optimizerB = torch.optim.Adam(modelB.parameters(), lr=LR)
 
     _ = train_model(modelB, trainB_loader, valB_loader, criterionB, optimizerB, device, epochs=EPOCHS_B)
