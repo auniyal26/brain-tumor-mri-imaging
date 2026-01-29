@@ -23,8 +23,8 @@
 
 ## Notes (5 bullets)
 
-* Improved: **Constrained threshold v2** is now best overall on TEST acc/balanced/macro F1 (**0.6193 / 0.6205 / 0.5865**).
-* Improved: Stage A gate is no longer “dumb”: Stage A VAL tumor recall **0.9818** and Stage A TEST balanced acc **0.8204** (gate stability improved).
-* Didn’t: TEST **glioma recall is still very low** (best so far is only **0.22**), and v2 still collapses glioma specifically.
-* Didn’t: This confirms the bottleneck has shifted from **thresholding** to **Stage B glioma generalization** (not a gate threshold issue now).
-* Next: run **one Stage B-only lever** (e.g., class-weighted/focal loss *or* balanced sampler) to raise glioma recall without touching Stage A or augmentations.
+- Improved: Stage B weighted CE v1 is best so far on TEST balanced acc + macro F1 (bal 0.6342, macroF1 0.6056), with acc 0.6244.
+- Improved: Glioma recall increased to 0.2800 (vs 0.2200 in the prior best run).
+- Didn’t: Meningioma recall dropped to 0.5739 (trade-off).
+- Didn’t: Glioma recall is still low overall; Stage B generalization remains the bottleneck under test shift.
+- Next: one Stage B-only lever: focal loss (gamma ~2) OR sampler change (pick exactly one next run).
