@@ -1,0 +1,5 @@
+- Improved: Best TEST balanced acc + macro F1 so far (bal 0.6342, macroF1 0.6056), acc 0.6244.
+- Improved: Glioma recall increased to 0.28 (vs 0.22 in prior best run).
+- Didn’t: Meningioma recall dropped to 0.5739 (trade-off).
+- Didn’t: Glioma recall is still low overall; Stage B generalization remains the bottleneck.
+- Next: one Stage B-only lever: focal loss OR sampler change

@@ -10,6 +10,8 @@
 
 ## Comparison (TEST)
 
+## Comparison (TEST)
+
 | Run                                                                |    acc | balanced acc | macro F1 | glioma recall | meningioma recall | no_tumor recall | pituitary recall |
 | ------------------------------------------------------------------ | -----: | -----------: | -------: | ------------: | ----------------: | --------------: | ---------------: |
 | Baseline 4-class                                                   | 0.4467 |       0.4314 |   0.3943 |        0.0900 |            0.3652 |          1.0000 |           0.2703 |
@@ -17,6 +19,7 @@
 | Run variance v1 (same code, THRESH_NO=0.07)                        | 0.4264 |       0.4364 |   0.3980 |        0.2000 |            0.1217 |          0.9238 |           0.5000 |
 | Robust Aug v1 (MRI intensity/grayscale, THRESH_NO=0.87)            | 0.4924 |       0.5076 |   0.4552 |        0.1700 |            0.2609 |          0.9238 |           0.6757 |
 | Constrained threshold v2 (min tumor recall on VAL, THRESH_NO=0.54) | 0.6193 |       0.6205 |   0.5865 |        0.2200 |            0.6696 |          0.8762 |           0.7162 |
+| Stage B weighted CE v1                                             | 0.6244 |       0.6342 |   0.6056 |        0.2800 |            0.5739 |          0.8857 |           0.7973 |
 
 ## Notes (5 bullets)
 
