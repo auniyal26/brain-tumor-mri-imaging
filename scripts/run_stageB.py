@@ -134,9 +134,10 @@ def sweep_T_for_stageAB(
                 return False
 
             # now within same safety bucket:
-            # primary: balanced_acc
-            if a["balanced_acc"] != b["balanced_acc"]:
-                return a["balanced_acc"] > b["balanced_acc"]
+            # primary: macro_f1 (better for not collapsing minority tumor classes)
+            if a["macro_f1"] != b["macro_f1"]:
+                return a["macro_f1"] > b["macro_f1"]
+
 
             # tie-breaker 1: fewer tumor->NO mistakes
             if a["fn_tumor_to_no"] != b["fn_tumor_to_no"]:
