@@ -1,3 +1,4 @@
+````md
 # Imaging — Brain Tumor MRI (4-class)
 
 Reproducible baseline + a two-stage classifier:
@@ -22,15 +23,15 @@ Imaging/Data/
     meningioma_tumor/
     no_tumor/
     pituitary_tumor/
-```
+````
 
 ## Setup
 
-Create/select a venv, then install common deps:
+Create/select a venv, then install deps:
 
 ```bash
 pip install torch torchvision numpy scikit-learn matplotlib tqdm pillow
-````
+```
 
 (If you already have a working env for this repo, keep using it.)
 
@@ -63,18 +64,16 @@ Comparison table (single source of truth):
 
 ## RESULTS (quick proof)
 
-Best overall run so far (TEST): **Constrained threshold v2 (THRESH_NO=0.54)**
+Best overall run so far (TEST): **Stage B weighted CE v1**
 See: `results_snapshot/COMPARISON.md`
+
+### Proof screenshots
+
+![Stage AB TEST confusion matrix (new)](assets/cm_test_new.png)
 
 ### Baseline (4-class ResNet18)
 
-Baseline on TEST (confusion matrix):
-
-![Baseline TEST confusion matrix](assets/baseline_cm_test.png)
-
-Training curves (baseline run):
-
-![Baseline training curves](assets/baseline_curves.png)
+![Baseline TEST confusion matrix](assets/cm_test.png)
 
 ```
 ```

@@ -1,14 +1,19 @@
 # Imaging Results Snapshot (Brain Tumor MRI)
 
-## Runs
+## Scoreboard (TEST) — best runs
 
-* Baseline (4-class ResNet18): `results_snapshot/baseline_4class/`
-* New (Stage AB + calibrated threshold): `results_snapshot/new_stageAB_calibrated/`
-* Run variance v1 (same code, THRESH_NO=0.07): `results_snapshot/run_variance_v1_thresh0p07/`
-* Robust Aug v1 (MRI intensity/grayscale, THRESH_NO=0.87): `results_snapshot/robust_aug_v1/`
-* Constrained threshold v2 (min tumor recall on VAL, THRESH_NO=0.54): `results_snapshot/thresh_rule_v2_T0p54/`
+**Best overall (right now):**
+- **Stage B weighted CE v1** → acc **0.6244**, bal **0.6342**, macroF1 **0.6056**
+  - recalls: glioma **0.28**, meningioma **0.5739**, no_tumor **0.8857**, pituitary **0.7973**
 
-## Comparison (TEST)
+**Runner-up:**
+- **Constrained threshold v2** → acc **0.6193**, bal **0.6205**, macroF1 **0.5865**
+  - recalls: glioma **0.22**, meningioma **0.6696**, no_tumor **0.8762**, pituitary **0.7162**
+
+**Today’s controlled lever (threshold selection = macroF1):**
+- **Threshold macroF1 v1** → acc **0.5406**, bal **0.5436**, macroF1 **0.5093**
+  - recalls: glioma **0.20**, meningioma **0.4957**, no_tumor **0.8571**, pituitary **0.6216**
+
 
 ## Comparison (TEST)
 
@@ -20,11 +25,16 @@
 | Robust Aug v1 (MRI intensity/grayscale, THRESH_NO=0.87)            | 0.4924 |       0.5076 |   0.4552 |        0.1700 |            0.2609 |          0.9238 |           0.6757 |
 | Constrained threshold v2 (min tumor recall on VAL, THRESH_NO=0.54) | 0.6193 |       0.6205 |   0.5865 |        0.2200 |            0.6696 |          0.8762 |           0.7162 |
 | Stage B weighted CE v1                                             | 0.6244 |       0.6342 |   0.6056 |        0.2800 |            0.5739 |          0.8857 |           0.7973 |
+| Threshold macroF1 v1 (THRESH_NO=0.92)                              | 0.5406 |       0.5436 |   0.5093 |        0.2000 |            0.4957 |          0.8571 |           0.6216 |
 
 ## Notes (5 bullets)
 
-- Improved: Stage B weighted CE v1 is best so far on TEST balanced acc + macro F1 (bal 0.6342, macroF1 0.6056), with acc 0.6244.
-- Improved: Glioma recall increased to 0.2800 (vs 0.2200 in the prior best run).
-- Didn’t: Meningioma recall dropped to 0.5739 (trade-off).
-- Didn’t: Glioma recall is still low overall; Stage B generalization remains the bottleneck under test shift.
-- Next: one Stage B-only lever: focal loss (gamma ~2) OR sampler change (pick exactly one next run).
+- Improved: Stage AB TEST acc (0.541) and macro F1 (0.509) increased vs Robust Aug v1.
+
+- Improved: meningioma recall improved to 0.496 while keeping no_tumor recall high (0.857).
+
+- Didn’t: glioma recall still low (0.20) — main remaining failure mode.
+
+- Didn’t: balanced acc only slightly improved vs calibrated best; still far from “clinical-ready”.
+
+- Next: keep this threshold rule, then do ONE lever next time on Stage B robustness (tumor-only intensity aug) or Stage B loss (label smoothing only).
